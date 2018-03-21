@@ -4,13 +4,13 @@ Intervals sample
 @author: Alejandro Lopez Mellina & Gwenaelle Mege Barriola
 '''
 
-class client (object):
-	_tell['countWords','wordCounts']
-	
-	def countWords(self,msg):
-		#hacer conteo de palabras en el mensaje
-		#acceder al servidor http y conseguir el texto
-		pass
-	def wordCounts(self,msg):
-		#hacer conteo de palabras en el mensaje
-		pass
+from pyactor.context import set_context, create_host, serve_forever
+
+
+if __name__ == "__main__":
+    set_context()
+    host = create_host('http://127.0.0.1:1277/')
+
+    print 'host listening at port 1277'
+
+    serve_forever()
