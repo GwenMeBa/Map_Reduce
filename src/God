@@ -1,9 +1,11 @@
 #!/bin/bash
 
-#Tilix-terminal -e "python -m SimpleHTTPServer"
+
+gnome-terminal -e "python -m SimpleHTTPServer"
 
 gnome-terminal -e "python client.py"
 gnome-terminal -e "python client1.py"
 gnome-terminal -e "python client2.py"
 
 gnome-terminal -e "python host.py"
+

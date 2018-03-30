@@ -1,13 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/python utf-8
 '''
 Intervals sample
 @author: Alejandro Lopez Mellina & Gwenaelle Mege Barriola
 '''
 
 
-from pyactor.context import set_context, create_host, Host, sleep, shutdown, sys
+from pyactor.context import set_context, create_host, Host, sleep, shutdown, sys, serve_forever
 from pyactor.exceptions import TimeoutError
-
+import collections
 
 class Server(object):
     _ask = {'gestionCount', 'gestionWord'}
@@ -26,21 +26,25 @@ class Server(object):
         self.mapper2 = remote_host2.spawn('mapper2','host/Mapper')  
         print 'e'
         self.reducer = host.spawn('reducer', 'host/Reducer')  
-
+        print 'i'
 
     def gestionCount(self, x):
         
-        self.mapper.countWords(x, reducer)
-        self.mapper1.countWords(x, reducer)
-        self.mapper2.countWords(x, reducer) 
-        
+        url=x[x.rfind('/')+1:]
+
+        self.mapper.countWords(url, self.reducer)
+        self.mapper1.countWords(url, self.reducer)
+        self.mapper2.countWords(url, self.reducer) 
+
         return self.reducer.getCount()
 
     def gestionWord(self, x):
 
-        self.mapper.wordCount(x, reducer)
-        self.mapper1.wordCount(x, reducer)
-        self.mapper2.wordCount(x, reducer)   
+        url=x[x.rfind('/')+1:]
+
+        self.mapper.wordCount(url, self.reducer)
+        self.mapper1.wordCount(url, self.reducer)
+        self.mapper2.wordCount(url, self.reducer)   
         
         return self.reducer.getWord()
 
@@ -58,18 +62,20 @@ class Mapper (object):
     reducer.reduceCount(len(lineas.split()))
 
   def wordCount(self, msg, reducer):
-    file=open(msg,"r+")
-    wordcount={}
-    li= ['*',';',',','.','-','$','!','"','%','&','/','(',')',':','=','?',']','+','<','>','{',']','^']
-    for a in li:
-        file=file.replace(a,'')
-    
-    for word in file.read().split():
+    with open(msg,"r") as file:
+        fi=file.read()
+        
+        wordcount={}
+        li= ['*',';',',','.','-','$','!','"','%','&','/','(',')',':','=','?',']','+','<','>','{',']','^']
+        for a in li:
+            fi=fi.replace(a,' ')
+        
+        for word in fi.split():
             if word not in wordcount:
                 wordcount[word] = 1
             else:
                 wordcount[word] += 1
-
+        
     reducer.reduceWord(wordcount)
 
 class Reducer (object):
@@ -78,6 +84,8 @@ class Reducer (object):
 
     def __init__(self):
         self.num_words = 0
+        self.words={}
+        self.count=collections.Counter(self.words)
 
     def reduceCount(self, x):
         self.num_words=self.num_words+x
@@ -86,10 +94,10 @@ class Reducer (object):
         return self.num_words
 
     def reduceWord(self, x):
-        self.num_words=self.num_words+x
+        self.count=self.count+collections.Counter(x)
 
     def getWord(self):
-        return self.num_words
+        return self.count
 
 
 if __name__ == "__main__":
@@ -98,9 +106,11 @@ if __name__ == "__main__":
 
     server = host.spawn('server', 'host/Server')
     server.init_st(host)
-    sleep(2)
 
-    print server.gestionCount("demo.txt")
-    print server.gestionWord("demo.txt")
 
-    shutdown()
+    demo=raw_input('Escoge nombre de archivo:')
+    print server.gestionCount(demo)
+    print server.gestionWord(demo)
+
+    serve_forever()
+   # shutdown()
