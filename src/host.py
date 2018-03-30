@@ -31,20 +31,45 @@ class Server(object):
     def gestionCount(self, x):
         
         url=x[x.rfind('/')+1:]
-
-        self.mapper.countWords(url, self.reducer)
-        self.mapper1.countWords(url, self.reducer)
-        self.mapper2.countWords(url, self.reducer) 
+        ca=open(url, 'r').read()
+        ca=ca.split(' ')
+        l=''
+        for a in range(0,(len(ca)/3)):
+            l=l+' '+ca[a]
+        self.mapper.countWords(l, self.reducer)
+        l=''
+        sleep(1)
+        for a in range((len(ca)/3),(2*(len(ca)/3))):
+            l=l+' '+ca[a]
+        self.mapper1.countWords(l, self.reducer)
+        sleep(1)
+        l=''
+        for a in range(2*(len(ca)/3),len(ca)):
+            l=l+' '+ca[a]
+        self.mapper2.countWords(l, self.reducer) 
 
         return self.reducer.getCount()
 
     def gestionWord(self, x):
 
         url=x[x.rfind('/')+1:]
-
-        self.mapper.wordCount(url, self.reducer)
-        self.mapper1.wordCount(url, self.reducer)
-        self.mapper2.wordCount(url, self.reducer)   
+        ca=open(url, 'r').read()
+        ca= ca.split(' ')
+        l=''
+        for a in range(0,(len(ca)/3)):
+            l=l+' '+ca[a]
+        self.mapper.wordCount(l, self.reducer)
+        l=''
+        sleep(1)
+        for a in range((len(ca)/3),(2*(len(ca)/3))):
+            l=l+' '+ca[a]
+        self.mapper1.wordCount(l, self.reducer)
+        sleep(1)
+        l=''
+        for a in range(2*(len(ca)/3),len(ca)):
+            l=l+' '+ca[a]
+        self.mapper2.wordCount(l, self.reducer) 
+    
         
         return self.reducer.getWord()
 
@@ -54,27 +79,25 @@ class Mapper (object):
   _tell=['']
   _ref=['countWords', 'wordCount']
   
-  def countWords(self, msg, reducer):
-    lineas = open(msg, 'r').read() 
+  def countWords(self, lineas, reducer):
+    print lineas
     li= ['*',';',',','.','-','$','!','"','%','&','/','(',')',':','=','?',']','+','<','>','{',']','^']
     for a in li:
-      lineas=lineas.replace(a,'')
+      lineas=lineas.replace(a,' ')
     reducer.reduceCount(len(lineas.split()))
 
-  def wordCount(self, msg, reducer):
-    with open(msg,"r") as file:
-        fi=file.read()
+  def wordCount(self, fi, reducer):
+    print fi    
+    wordcount={}
+    li= ['*',';',',','.','-','$','!','"','%','&','/','(',')',':','=','?',']','+','<','>','{',']','^']
+    for a in li:
+        fi=fi.replace(a,' ')
         
-        wordcount={}
-        li= ['*',';',',','.','-','$','!','"','%','&','/','(',')',':','=','?',']','+','<','>','{',']','^']
-        for a in li:
-            fi=fi.replace(a,' ')
-        
-        for word in fi.split():
-            if word not in wordcount:
-                wordcount[word] = 1
-            else:
-                wordcount[word] += 1
+    for word in fi.split():
+        if word not in wordcount:
+            wordcount[word] = 1
+        else:
+            wordcount[word] += 1
         
     reducer.reduceWord(wordcount)
 
