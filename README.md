@@ -16,5 +16,6 @@ The steps that we have implemented are the following ones:
 
 
 ### *Authored by:*
-
+```
 Alejandro López Mellina & Gwenaëlle Mege Barriola
+```
