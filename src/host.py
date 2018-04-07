@@ -7,9 +7,9 @@ Intervals sample
 
 from pyactor.context import set_context, create_host, Host, sleep, shutdown, sys, serve_forever
 from pyactor.exceptions import TimeoutError
-import collections
-import os
+import collections, os, datetime, timeit
 
+start = timeit.default_timer()
 class Server(object):
     _ask = {''}
     _tell = ['init_st', 'gestionCount', 'gestionWord']
@@ -29,27 +29,29 @@ class Server(object):
 
     def gestionCount(self, x):
         
-        #url=x[x.rfind('/')+1:]
         ca=open(x, 'r').read().replace('\n', ' %')
-        #words = re.findall(r'\w+', open('hamlet.txt').read().lower())  https://docs.python.org/2/library/collections.html
 
         li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{',']','^']
         for a in li:
             ca=ca.replace(a, '')
         ca=ca.split()
+        
+        start = timeit.default_timer()
         self.mapper.countWords(ca[0:(len(ca)/3)], self.reducer)
+        print 'caca'
         self.mapper1.countWords(ca[(len(ca)/3):2*(len(ca)/3)], self.reducer)
+        print 'asd'
         self.mapper2.countWords(ca[2*(len(ca)/3):(len(ca))], self.reducer) 
 
     def gestionWord(self, x):
 
-        #url=x[x.rfind('/')+1:]
         ca=open(x, 'r').read()
         
         li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^']
         for a in li:
             ca=ca.replace(a, '')
         ca=ca.split()
+        start = timeit.default_timer()
         self.mapper.wordCount(ca[0:(len(ca)/3)], self.reducer)
         self.mapper1.wordCount(ca[(len(ca)/3):2*(len(ca)/3)], self.reducer)
         self.mapper2.wordCount(ca[2*(len(ca)/3):(len(ca))], self.reducer) 
@@ -62,11 +64,9 @@ class Mapper (object):
   _ref=['countWords', 'wordCount']
   
   def countWords(self, lineas, reducer):
-    print 'countWords...'
     reducer.reduceCount(len(lineas))
 
-  def wordCount(self, fi, reducer):
-    print 'wordCount...'        
+  def wordCount(self, fi, reducer):      
     reducer.reduceWord(collections.Counter(map(str.lower,fi)))
 
 class Reducer (object):
@@ -83,19 +83,16 @@ class Reducer (object):
         self.mappersC= self.mappersC-1
         self.num_words=self.num_words+x
         if (self.mappersC==0):
-            self.getCount()
+            print timeit.default_timer() - start
+            print self.num_words
 
-    def getCount(self):
-        print self.num_words
 
     def reduceWord(self, x):
         self.mappersW= self.mappersW -1
         self.count=self.count+collections.Counter(x)
         if (self.mappersW==0):
-            self.getWord()
-
-    def getWord(self):
-        print dict(self.count)
+            print timeit.default_timer() - start
+            print dict(self.count)
 
 
 if __name__ == "__main__":
@@ -108,8 +105,13 @@ if __name__ == "__main__":
 
     demo=raw_input('Escoge nombre de archivo:')
     os.system("cd ../src \n ./download "+demo)
-    server.gestionCount("../src/"+demo)
-    server.gestionWord("../src/"+demo)
+    op=raw_input('Escoge opcion: \n 1. CountWord\n 2. WordCount')
+    if op=='1':
+        server.gestionCount("../src/"+demo)
+    elif op=='2':
+        server.gestionWord("../src/"+demo)
+    else:
+        print 'Opcion no correcta'
 
     serve_forever()
    # shutdown()
