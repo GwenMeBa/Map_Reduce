@@ -15,16 +15,13 @@ else:
 	start = timeit.default_timer()
 	with open(sys.argv[1],"r") as file:
 		fi=file.read()
-		print fi
 		wordcount={}
 		li= ['*',';',',','.','-','$','!','"','%','&','/','(',')',':','=','?',']','+','<','>','{',']','^']
 		for a in li:
 			fi=fi.replace(a,'')
-		print fi
 		for word in fi.split():
 			if word not in wordcount:
 				wordcount[word] = 1
 			else:
 				wordcount[word] += 1
-		print wordcount
 		print timeit.default_timer() - start
