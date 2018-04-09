@@ -7,6 +7,7 @@ As it name suggests, it allows for distributed processing of the map() and reduc
 
 Functions implemented:
 > A `WordCount` function to count how many times a word appears in a large file.
+
 > A `CountWord` function to count the total number of words of a large file.
 
 The main objectives of this project are:
