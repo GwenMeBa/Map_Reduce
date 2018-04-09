@@ -6,12 +6,13 @@ Intervals sample
 '''
 
 #Secuential count words
-import sys
+import sys, timeit
 from pyactor.context import set_context, create_host, sleep, shutdown
 
 if len(sys.argv) != 2:
 	print 'Debe pasar un archivo'
 else:
+	start = timeit.default_timer()
 	with open(sys.argv[1],"r") as file:
 		fi=file.read()
 		print fi
@@ -26,4 +27,4 @@ else:
 			else:
 				wordcount[word] += 1
 		print wordcount
-		
+		print timeit.default_timer() - start

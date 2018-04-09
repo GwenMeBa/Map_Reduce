@@ -7,9 +7,8 @@ Intervals sample
 
 from pyactor.context import set_context, create_host, Host, sleep, shutdown, sys, serve_forever
 from pyactor.exceptions import TimeoutError
-import collections, os, datetime, timeit
+import collections, os, datetime, timeit, time
 
-start = timeit.default_timer()
 class Server(object):
     _ask = {'parsefile'}
     _tell = ['init_st', 'gestionCount', 'gestionWord']
@@ -42,21 +41,20 @@ class Server(object):
 
     def gestionCount(self, x):
 
-        start = timeit.default_timer()
         for i in range(0,3):
             self.parsefile(x,i,3)
-        self.mapper.countWords(x,0, self.reducer)
-        self.mapper1.countWords(x,1, self.reducer)
-        self.mapper2.countWords(x,2, self.reducer) 
+        start = timeit.default_timer()
+        self.mapper.countWords(x,0, self.reducer, start)
+        self.mapper1.countWords(x,1, self.reducer, start)
+        self.mapper2.countWords(x,2, self.reducer, start) 
 
     def gestionWord(self, x):
-        start = timeit.default_timer()
-        ca=open(x, 'r').read()
         for i in range(0,3):
             self.parsefile(x,i,3)
-        self.mapper.wordCount(x, 0, self.reducer)
-        self.mapper1.wordCount(x, 1, self.reducer)
-        self.mapper2.wordCount(x, 2, self.reducer) 
+        start = time.time()
+        self.mapper.wordCount(x, 0, self.reducer, start)
+        self.mapper1.wordCount(x, 1, self.reducer, start)
+        self.mapper2.wordCount(x, 2, self.reducer, start) 
         
 
 
@@ -65,19 +63,19 @@ class Mapper (object):
   _tell=['countWords', 'wordCount']
   _ref=['countWords', 'wordCount']
   
-  def countWords(self, file, idmap, reducer):
+  def countWords(self, file, idmap, reducer,start):
     ca=open(file+str(idmap), 'r').read()
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^']
     for a in li:
         ca=ca.replace(a, '')
-    reducer.reduceCount(len(ca.split()))
+    reducer.reduceCount(len(ca.split()), start)
 
-  def wordCount(self, file, idmap, reducer):
+  def wordCount(self, file, idmap, reducer, start):
     ca=open(file+str(idmap), 'r').read()
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^','\\n']
     for a in li:
         ca=ca.replace(a, '')
-    reducer.reduceWord(collections.Counter(map(str.lower,ca.split(' '))))
+    reducer.reduceWord(collections.Counter(map(str.lower,ca.split(' '))), start)
 
 class Reducer (object):
     _ask = {''}
@@ -89,19 +87,19 @@ class Reducer (object):
         self.mappersC= 3
         self.mappersW= 3
 
-    def reduceCount(self, x):
+    def reduceCount(self, x, start):
         self.mappersC= self.mappersC-1
         self.num_words=self.num_words+x
         if (self.mappersC==0):
-            print timeit.default_timer() - start
+            val= (time.time() - start)
             print self.num_words
+            print val 
 
-
-    def reduceWord(self, x):
+    def reduceWord(self, x, start):
         self.mappersW= self.mappersW -1
         self.count=self.count+collections.Counter(x)
         if (self.mappersW==0):
-            val= timeit.default_timer() - start
+            val= (time.time() - start)
             print dict(self.count)
             print val
 
