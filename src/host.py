@@ -42,7 +42,7 @@ class Server(object):
 
         for i in range(0,3):
             self.parsefile(x,i,3)
-        start = time.default_timer()
+        start = time.time()
         self.mapper.countWords(x,0, self.reducer, start)
         self.mapper1.countWords(x,1, self.reducer, start)
         self.mapper2.countWords(x,2, self.reducer, start) 
