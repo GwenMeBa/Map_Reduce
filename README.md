@@ -30,6 +30,10 @@ For the distributed version, we have created a file named 'God'. It invokes five
 
 Each mapper is in a different terminal to be able to parallelize their execution. The function of these is to wait until the Server sends them the information to execute. Once they have all the information they'll execute the Then, they will execute the WordCount or CountWord functions for a chunk of code 
 
+Server -> takes blabla from server apache, parte en chunks el fichero, envia a mappers el nombre del file qe tiene que analizar
+
+Mapper manda a reducer que coge y junta los datos de mapper.
+
 
 ## *Results*
 
