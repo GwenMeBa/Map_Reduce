@@ -19,24 +19,15 @@ The steps used for the distributed implementation are the following ones:
 * "Reduce" step: In this step, the worker named "reducer" receives all the resuls from the mappers and joins them. With this step we obtain the final result.
 
 
-## *Implementation*
-First of all, for the secuential version
+## Use
+To be able to use our distributed code, open a terminal in the Server folder and use the following command:
+```
+./God 
+```
+Note that 5 different terminals are now open. Introduce in the last one the name of the file that you want to use and the function that you want to execute (it can be 1 for countWord or 2 for wordCount.
 
-
-For the distributed version, we have created a file named 'God'. It invokes five different terminals:
-* The first one creates an Apache Server.
-* Three of them have each one a different Mapper.   
-* One of them is the Server.
-
-Each mapper is in a different terminal to be able to parallelize their execution. The function of these is to wait until the Server sends them the information to execute. Once they have all the information they'll execute the Then, they will execute the WordCount or CountWord functions for a chunk of code 
-
-Server -> takes blabla from server apache, parte en chunks el fichero, envia a mappers el nombre del file qe tiene que analizar
-
-Mapper manda a reducer que coge y junta los datos de mapper.
-
-
-## *Results*
-
+## Comments
+To see all the implementation comments and the documentation of the code, please open the MapReduce.pdf file.
 
 ### *Authored by:*
 ```
