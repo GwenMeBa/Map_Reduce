@@ -25,6 +25,7 @@ To be able to use our distributed code, open a terminal in the Server folder and
 ./God 
 ```
 Note that 5 different terminals are now open. 
+
 Introduce in the last one the name of the file that you want to use and the function that you want to execute (it can be 1 for countWord or 2 for wordCount).
 
 ## Comments
