@@ -29,13 +29,15 @@ class Server(object):
         text=open(file, 'r').readlines()
         
         text1 = open(file+str(nmapper), 'w')
-
-        if(nmapper==0): 
-            text1.write(str(text[0:(len(text)/3)]))
+        if(nmapper==0):
+            for a in text[0:(len(text)/3)]:
+                text1.write(a)
         if(nmapper==1): 
-            text1.write(str(text[(len(text)/3):2*(len(text)/3)]))
+            for a in text[(len(text)/3):2*(len(text)/3)]:
+                text1.write(a)
         if(nmapper==2): 
-            text1.write(str(text[2*(len(text)/3):(len(text))]))
+            for a in text[2*(len(text)/3):(len(text))]:
+                text1.write(a)
         text1.close()
 
     def gestionCount(self, x):
@@ -74,7 +76,7 @@ class Mapper (object):
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^','\\n']
     for a in li:
         text=text.replace(a, '')
-    reducer.reduceWord(collections.Counter(map(str.lower,text.split(' '))), start)
+    reducer.reduceWord(collections.Counter(text.split(' ')), start)
 
 class Reducer (object):
     _ask = {''}
@@ -99,7 +101,6 @@ class Reducer (object):
         self.dictionary=self.dictionary+collections.Counter(x)
         if (self.mappersW==0):
             value= (time.time() - start)
-            print dict(self.dictionary)
             print value
 
 
