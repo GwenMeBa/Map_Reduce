@@ -24,7 +24,8 @@ To be able to use our distributed code, open a terminal in the Server folder and
 ```
 ./God 
 ```
-Note that 5 different terminals are now open. Introduce in the last one the name of the file that you want to use and the function that you want to execute (it can be 1 for countWord or 2 for wordCount.
+Note that 5 different terminals are now open. 
+Introduce in the last one the name of the file that you want to use and the function that you want to execute (it can be 1 for countWord or 2 for wordCount).
 
 ## Comments
 To see all the implementation comments and the documentation of the code, please open the MapReduce.pdf file.
