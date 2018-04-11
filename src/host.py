@@ -53,7 +53,12 @@ class Server(object):
     def gestionWord(self, x):
         for i in range(0,3):
             self.parsefile(x,i,3)
+
+	self.mapper
         start = time.time()
+        self.mapper.getFile(x, 0)
+        self.mapper.getFile(x, 1)
+        self.mapper.getFile(x, 2)
         self.mapper.wordCount(x, 0, self.reducer, start)
         self.mapper1.wordCount(x, 1, self.reducer, start)
         self.mapper2.wordCount(x, 2, self.reducer, start) 
@@ -65,8 +70,10 @@ class Mapper (object):
   _tell=['countWords', 'wordCount']
   _ref=['countWords', 'wordCount']
   
-  def countWords(self, file, idmap, reducer,start):
+  def getFile(self, file, idmap):
     os.system('wget http://10.20.6.5:8000/'+file+str(idmap))
+
+  def countWords(self, file, idmap, reducer,start):
     text=open(file+str(idmap), 'r').read()
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^']
     for a in li:
