@@ -46,6 +46,9 @@ class Server(object):
         for i in range(0,3):
             self.parsefile(x,i,3)
         start = time.time()
+	self.mapper.getFile(x, 0)
+        self.mapper.getFile(x, 1)
+        self.mapper.getFile(x, 2)
         self.mapper.countWords(x,0, self.reducer, start)
         self.mapper1.countWords(x,1, self.reducer, start)
         self.mapper2.countWords(x,2, self.reducer, start) 
@@ -66,7 +69,7 @@ class Server(object):
 
 
 class Mapper (object):
-  _ask = {''}
+  _ask = {'getFile'}
   _tell=['countWords', 'wordCount']
   _ref=['countWords', 'wordCount']
   
@@ -81,7 +84,6 @@ class Mapper (object):
     reducer.reduceCount(len(text.split()), start)
 
   def wordCount(self, file, idmap, reducer, start):
-    os.system('wget http://10.20.6.5:8000/'+file+str(idmap))
     text=open(file+str(idmap), 'r').read()
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^','\\n']
     for a in li:
@@ -116,7 +118,7 @@ class Reducer (object):
 
 if __name__ == "__main__":
     set_context()
-    host = create_host('http://127.0.0.1:1679')
+    host = create_host('http://10.21.6.5:1679')
 
     server = host.spawn('server', 'host/Server')
     server.init_st(host)
