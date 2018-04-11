@@ -27,7 +27,7 @@ class Server(object):
 
     def parsefile(self, file, nmapper, nMappers):
         text=open(file, 'r').readlines()
-        
+        os.system('cd .. \n cd Server')
         text1 = open(file+str(nmapper), 'w')
         if(nmapper==0):
             for a in text[0:(len(text)/3)]:
@@ -39,6 +39,7 @@ class Server(object):
             for a in text[2*(len(text)/3):(len(text))]:
                 text1.write(a)
         text1.close()
+	os.system('cd .. \n cd src')
 
     def gestionCount(self, x):
 
@@ -65,6 +66,7 @@ class Mapper (object):
   _ref=['countWords', 'wordCount']
   
   def countWords(self, file, idmap, reducer,start):
+    os.system('wget http://10.20.6.5:8000/'+file+str(idmap))
     text=open(file+str(idmap), 'r').read()
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^']
     for a in li:
@@ -72,6 +74,7 @@ class Mapper (object):
     reducer.reduceCount(len(text.split()), start)
 
   def wordCount(self, file, idmap, reducer, start):
+    os.system('wget http://10.20.6.5:8000/'+file+str(idmap))
     text=open(file+str(idmap), 'r').read()
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^','\\n']
     for a in li:
