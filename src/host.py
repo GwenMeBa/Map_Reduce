@@ -27,8 +27,8 @@ class Server(object):
 
     def parsefile(self, file, nmapper, nMappers):
         text=open(file, 'r').readlines()
-        os.system('cd .. \n cd Server')
-        text1 = open(file+str(nmapper), 'w')
+  	#os.system('cd .. \n cd Server')
+        text1 = open(file.replace('src', 'Server')+str(nmapper), 'w')
         if(nmapper==0):
             for a in text[0:(len(text)/3)]:
                 text1.write(a)
@@ -39,16 +39,17 @@ class Server(object):
             for a in text[2*(len(text)/3):(len(text))]:
                 text1.write(a)
         text1.close()
-	os.system('cd .. \n cd src')
+	#os.system('cd .. \n cd src')
 
     def gestionCount(self, x):
 
         for i in range(0,3):
             self.parsefile(x,i,3)
-        start = time.time()
+        
 	self.mapper.getFile(x, 0)
         self.mapper.getFile(x, 1)
         self.mapper.getFile(x, 2)
+        start = time.time()
         self.mapper.countWords(x,0, self.reducer, start)
         self.mapper1.countWords(x,1, self.reducer, start)
         self.mapper2.countWords(x,2, self.reducer, start) 
@@ -56,12 +57,11 @@ class Server(object):
     def gestionWord(self, x):
         for i in range(0,3):
             self.parsefile(x,i,3)
-
-	self.mapper
-        start = time.time()
+        
         self.mapper.getFile(x, 0)
         self.mapper.getFile(x, 1)
         self.mapper.getFile(x, 2)
+        start = time.time()
         self.mapper.wordCount(x, 0, self.reducer, start)
         self.mapper1.wordCount(x, 1, self.reducer, start)
         self.mapper2.wordCount(x, 2, self.reducer, start) 
@@ -74,10 +74,10 @@ class Mapper (object):
   _ref=['countWords', 'wordCount']
   
   def getFile(self, file, idmap):
-    os.system('wget http://10.20.6.5:8000/'+file+str(idmap))
+    os.system('wget http://10.20.6.5:8000/'+file.replace('../src/', '')+str(idmap))
 
   def countWords(self, file, idmap, reducer,start):
-    text=open(file+str(idmap), 'r').read()
+    text=open(file.replace('src+str(idmap), 'r').read()
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^']
     for a in li:
         text=text.replace(a, '')
