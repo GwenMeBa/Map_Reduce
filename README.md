@@ -20,6 +20,12 @@ The steps used for the distributed implementation are the following ones:
 
 
 ## Use
+First of all, exexute in a terminal the following instruction:
+```
+pip install pyactor
+```
+This dowloads the pyactor library used for the implementation of the code.
+
 To be able to use our distributed code, open a terminal in the Server folder and use the following command:
 ```
 ./God 
