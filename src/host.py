@@ -27,8 +27,8 @@ class Server(object):
 
     def parsefile(self, file, nmapper, nMappers):
         text=open(file, 'r').readlines()
-  	#os.system('cd .. \n cd Server')
-        text1 = open(file.replace('src', 'Server')+str(nmapper), 'w')
+  	
+        text1 = open(file+str(nmapper), 'w')
         if(nmapper==0):
             for a in text[0:(len(text)/3)]:
                 text1.write(a)
@@ -39,7 +39,7 @@ class Server(object):
             for a in text[2*(len(text)/3):(len(text))]:
                 text1.write(a)
         text1.close()
-	#os.system('cd .. \n cd src')
+	
 
     def gestionCount(self, x):
 
@@ -74,10 +74,11 @@ class Mapper (object):
   _ref=['countWords', 'wordCount']
   
   def getFile(self, file, idmap):
-    os.system('wget http://10.20.6.5:8000/'+file.replace('../src/', '')+str(idmap))
+    os.system('wget http://10.21.6.5:8000/'+file+str(idmap))
 
   def countWords(self, file, idmap, reducer,start):
-    text=open(file.replace('src+str(idmap), 'r').read()
+    print 'holi'
+    text=open(file+str(idmap), 'r').read()
     li= ['*',';',',','.','-','$','!','"','%','&','/','\\','(',')',':','=','?',']','+','<','>','{','[','^']
     for a in li:
         text=text.replace(a, '')
@@ -125,12 +126,12 @@ if __name__ == "__main__":
 
 
     demo=raw_input('\n Escoge nombre de archivo:')
-    os.system("cd ../src \n ./download "+demo)
+    os.system("cd src \n ./download "+demo)
     op=raw_input('Escoge opcion: \n  1. CountWord\n  2. WordCount\n :')
     if op=='1':
-        server.gestionCount("../src/"+demo)
+        server.gestionCount(demo)
     elif op=='2':
-        server.gestionWord("../src/"+demo)
+        server.gestionWord(demo)
     else:
         print 'Opcion no correcta'
 
