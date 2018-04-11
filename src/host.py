@@ -16,9 +16,9 @@ class Server(object):
 
     def init_st(self, host):
        
-        remote_host = host.lookup_url('http://127.0.0.1:1277/', Host)
-        remote_host1 = host.lookup_url('http://127.0.0.1:1278/', Host)
-        remote_host2 = host.lookup_url('http://127.0.0.1:1279/', Host)
+        remote_host = host.lookup_url('http://10.21.6.4:1277/', Host)
+        remote_host1 = host.lookup_url('http://10.21.6.4:1278/', Host)
+        remote_host2 = host.lookup_url('http://10.21.6.4:1279/', Host)
         
         self.mapper = remote_host.spawn('mapper','host/Mapper') 
         self.mapper1 = remote_host1.spawn('mapper1','host/Mapper')    
